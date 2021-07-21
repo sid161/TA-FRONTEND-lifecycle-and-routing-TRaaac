@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+     class App extends React.Component{
+         constructor(props){
+             super(props)
+                 this.state = {
+                    data:null,
+                    title:"My Name is",
+                    value: "",
+                    img:""
+                    
+             }
+         }
+
+         componentDidMount() {
+    fetch("https://randomuser.me/api/")
+      .then((data) => data.json())
+      .then((data) =>
+        this.setState((preState) => ({
+          data: data.results[0],
+          title: "My Name is",
+          value: `${data.results[0].name.title} ${data.results[0].name.first} ${data.results[0].name.last}`,
+          img: data.results[0].picture.medium,
+        }))
+      );
+  }
+  componentWillUnmount() {
+    this.setState((preState) => ({
+      data: null,
+      value: preState.value,
+      title: preState.title,
+      img: preState.img,
+    }));
+  }
+
+        
+        
+         render(){
+            
+             return(
+                 <>
+                 <img src = {this.state.img} alt = ""/>
+                 <button onClick = {() => {
+                     return this.setState({
+                         title:"My email is",
+                         value:this.state.data.email
+                     })
+                 }}>Email</button>
+
+                 <button onClick = {() => {
+                     return this.setState({
+                         title:"My age is",
+                         value:this.state.data.registered.age
+                     })
+                 }}>age</button>
+
+                 <button onClick = {() => {
+                     return this.setState({
+                         title:"My number is",
+                         value:this.state.data.phone
+                     })
+                 }}>Phone</button>
+
+                 <button
+                onClick={() => {
+                  this.componentWillUnmount();
+                  this.componentDidMount();
+                }}
+              >
+                {this.state.data ? "Data" : "loading."}
+              </button>
+                 </>
+             )
+     }
+
+
+    ReactDOM.render(<App/>,document.getElementById('root'))
+    </script>
+    
+</body>
+</html>
